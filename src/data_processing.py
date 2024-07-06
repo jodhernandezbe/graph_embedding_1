@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""Data processing module.
+
+This module contains the functions to process the raw data.
+
+"""
+
 import os
 from typing import Dict, TypedDict
 
@@ -10,7 +19,7 @@ from rdkit.Chem.rdchem import Mol
 class CompoundDict(TypedDict):
     """Dictionary containing the desired data."""
 
-    ac_50_log: float
+    ac_50: float
     graph: nx.Graph
 
 
@@ -66,11 +75,7 @@ def molecule_to_graph(mol: Mol) -> nx.Graph:
     """
     graph = nx.Graph()
     for atom in mol.GetAtoms():  # type: ignore
-        graph.add_node(
-            atom.GetIdx(),
-            atomic_num=atom.GetAtomicNum(),
-            is_aromatic=atom.GetIsAromatic(),
-        )
+        graph.add_node(atom.GetIdx())
     for bond in mol.GetBonds():  # type: ignore
         graph.add_edge(
             bond.GetBeginAtomIdx(), bond.GetEndAtomIdx(), bond_type=bond.GetBondType()
@@ -90,9 +95,9 @@ def run_processing() -> Dict[int, CompoundDict]:
     raw_data.dropna(inplace=True)
     for _, row in raw_data.iterrows():
         smile = row["PUBCHEM_EXT_DATASOURCE_SMILES"]
-        ac_50_log = row["Qualified AC50"]
+        ac_50 = row["Qualified AC50"]
         result_tag = row["PUBCHEM_RESULT_TAG"]
         mol = get_molecule_by_smile(smile)
         graph = molecule_to_graph(mol)
-        compound_graphs[result_tag] = {"ac_50_log": ac_50_log, "graph": graph}
+        compound_graphs[result_tag] = {"ac_50": ac_50, "graph": graph}
     return compound_graphs
