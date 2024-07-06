@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+description = "Anonymous path for graph embedding"
+authors = ["Jose D. Hernandez-Betancur <jodhernandezbemj@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+poetry = "^1.8.3"
+rdkit = "^2024.3.3"
+pandas = "^2.2.2"
+networkx = "^3.3"
+pandas-stubs = "^2.2.2.240603"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.1"
+pyright = "^1.1.370"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
